@@ -20,8 +20,6 @@ defmodule CalorieCounting do
     |> Enum.sum()
   end
 
-  defp largest_groups(new, acc, groups) when length(acc) < groups, do: [new | acc]
-
   defp largest_groups(new, acc, groups) do
     [new | acc]
     |> Enum.sort()
