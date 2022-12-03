@@ -40,4 +40,36 @@ defmodule RucksackReorganizationTest do
                157
     end
   end
+
+  describe "total_priorities_for_badges/1" do
+    test "returns 0 for an empty file" do
+      file = """
+      """
+
+      assert RucksackReorganization.total_priorities_for_badges(String.split(file, "\n")) == 0
+    end
+
+    test "return 1 for badge `a`" do
+      file = """
+      abc
+      ade
+      afg
+      """
+
+      assert RucksackReorganization.total_priorities_for_badges(String.split(file, "\n")) == 1
+    end
+
+    test "return 70 for given example" do
+      file = """
+      vJrwpWtwJgWrhcsFMMfFFhFp
+      jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
+      PmmdzqPrVvPwwTWBwg
+      wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
+      ttgJtRGJQctTZtZT
+      CrZsJsPPZsGzwwsLwLmpwMDw
+      """
+
+      assert RucksackReorganization.total_priorities_for_badges(String.split(file, "\n")) == 70
+    end
+  end
 end

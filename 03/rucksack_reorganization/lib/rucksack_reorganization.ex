@@ -1,12 +1,22 @@
 defmodule RucksackReorganization do
   @lowercase_offset 96
   @uppercase_offset 38
+  @group_size 3
 
   def total_priorities_for_duplicates(data) do
     data
     |> clean()
     |> Stream.map(&rucksack_to_compartments/1)
     |> Stream.map(&find_duplicate_item/1)
+    |> Stream.map(&priority_for_item/1)
+    |> Enum.sum()
+  end
+
+  def total_priorities_for_badges(data) do
+    data
+    |> clean()
+    |> Stream.chunk_every(@group_size)
+    |> Stream.map(&find_badge/1)
     |> Stream.map(&priority_for_item/1)
     |> Enum.sum()
   end
@@ -35,4 +45,15 @@ defmodule RucksackReorganization do
 
   defp value_for_character(character) when character >= hd('A') and character <= hd('Z'),
     do: character - @uppercase_offset
+
+  defp find_badge(rucksacks) do
+    rucksacks = Enum.map(rucksacks, &String.codepoints/1)
+
+    rucksacks
+    |> hd()
+    |> Enum.filter(fn item ->
+      Enum.all?(rucksacks, fn rucksack -> item in rucksack end)
+    end)
+    |> hd()
+  end
 end
